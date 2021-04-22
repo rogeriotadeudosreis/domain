@@ -18,6 +18,13 @@ import com.rogerioreis.domain.repository.OrderItemRepository;
 import com.rogerioreis.domain.repository.OrderRepository;
 import com.rogerioreis.domain.repository.ProductRepository;
 
+/*
+ * A interface CommandLineRunner, possibilitar implementar um método
+ * para executar nossos testes em desenvolvimento por aqui, conforme
+ * a partir da linha 47 podemos instanciar os objetos e ver o resultado
+ * da aplicação.
+ * 
+ */
 @SpringBootApplication
 public class DomainApplication implements CommandLineRunner {
 
@@ -29,7 +36,7 @@ public class DomainApplication implements CommandLineRunner {
 
 	@Autowired
 	private OrderRepository orderRepository;
-	
+
 	@Autowired
 	private OrderItemRepository orderItemRepository;
 
@@ -41,9 +48,9 @@ public class DomainApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 
 		Client c1 = new Client(null, "Rogério", "rogerio@gmail.com");
-		
+
 		clientRepository.save(c1);
-		
+
 		Product p1 = new Product(null, "TV", 1000.0);
 		Product p2 = new Product(null, "Mouse", 40.0);
 		Product p3 = new Product(null, "PC", 1200.0);
@@ -54,7 +61,7 @@ public class DomainApplication implements CommandLineRunner {
 		Order o2 = new Order(null, Instant.parse("2021-04-21T11:25:09Z"), OrderStatus.WAITING, c1);
 
 		orderRepository.saveAll(Arrays.asList(o1, o2));
-		
+
 		OrderItem i1 = new OrderItem(null, 1, 1000.00, p1, o1);
 		OrderItem i2 = new OrderItem(null, 2, 40.0, p2, o1);
 		OrderItem i3 = new OrderItem(null, 1, 40.0, p2, o2);
