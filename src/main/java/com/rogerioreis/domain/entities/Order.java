@@ -13,22 +13,41 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 @Entity
 @Table(name = "tb_order")
 public class Order {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@EqualsAndHashCode.Include
 	private Long Id;
 
 	private Instant moment;
 
 	private OrderStatus status;
 
+	/*
+	 * A notação ManyToOne abaixo, neste modelo de projeto indica que pode haver
+	 * vários pedidos para um mesmo cliente.
+	 * 
+	 */
+
 	@ManyToOne
 	@JoinColumn(name = "client_id")
 	private Client client;
 
+	/*
+	 * E a notação OneToMany, indica que um pedido tem uma lista de itens.
+	 */
 	@OneToMany(mappedBy = "order")
 	private List<OrderItem> items = new ArrayList<>();
 
@@ -43,69 +62,6 @@ public class Order {
 		this.status = status;
 		this.client = client;
 	}
-
-	public Long getId() {
-		return Id;
-	}
-
-	public void setId(Long id) {
-		Id = id;
-	}
-
-	public Instant getMoment() {
-		return moment;
-	}
-
-	public void setMoment(Instant moment) {
-		this.moment = moment;
-	}
-
-	public OrderStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(OrderStatus status) {
-		this.status = status;
-	}
-
-	public Client getClient() {
-		return client;
-	}
-
-	public void setClient(Client client) {
-		this.client = client;
-	}
-
-	public List<OrderItem> getItems() {
-		return items;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((Id == null) ? 0 : Id.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Order other = (Order) obj;
-		if (Id == null) {
-			if (other.Id != null)
-				return false;
-		} else if (!Id.equals(other.Id))
-			return false;
-		return true;
-	}
-
-	
 
 	public Double getTotal() {
 		double sum = 0.0;

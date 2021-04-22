@@ -10,20 +10,45 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 @Entity
 @Table(name = "tb_order_item")
 public class OrderItem {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@EqualsAndHashCode.Include
 	private Long id;
 
 	private Integer quantity;
 	private Double price;
 
+	/*
+	 * A notação ManyToOne abaixo neste modelo de projeto indica que nesta entidade
+	 * são muitos itens podem indicar apenas para o mesmo produto
+	 * 
+	 */
+
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
+
+	/*
+	 * A notação ManyToOne abaixo neste modelo de projeto também indica nesta
+	 * entidade que pode haver muitos itens para apenas um pedido
+	 * 
+	 * A notação JsonIgnore, impede que o retorno dos dados entre em um lupe
+	 * pela associação bidirecional entre itens e pedido.
+	 * 
+	 */
 
 	@JsonIgnore
 	@ManyToOne
@@ -41,77 +66,6 @@ public class OrderItem {
 		this.price = price;
 		this.product = product;
 		this.order = order;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Integer getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(Integer quantity) {
-		this.quantity = quantity;
-	}
-
-	public Double getPrice() {
-		return price;
-	}
-
-	public void setPrice(Double price) {
-		this.price = price;
-	}
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
-	public Order getOrder() {
-		return order;
-	}
-
-	public void setOrder(Order order) {
-		this.order = order;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		OrderItem other = (OrderItem) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "OrderItem [id=" + id + ", quantity=" + quantity + ", price=" + price + ", product=" + product
-				+ ", order=" + order + "]";
 	}
 
 	public Double getSubTotal() {
